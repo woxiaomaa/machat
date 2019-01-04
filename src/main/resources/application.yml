@@ -4,6 +4,24 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
     username: root
     password: root
-
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      connection-timeout: 25000
+      minimum-idle: 5
+      maximum-pool-size: 20
+      auto-commit: true
+      idle-timeout: 500000
+      pool-name: DatebookHikariCP
+      max-lifetime: 28740000
+      connection-test-query: SELECT 1
 server:
   port: 8080
+
+
+#mybatis:
+#  type-aliases-package: com.ma.bean
+#  mapper-locations: classpath:mapper/*.xml
+#mapper:
+#  mappers: com.ma.mapper
+#  not-empty: false
+#  identity: MYSQL
