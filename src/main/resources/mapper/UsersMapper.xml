@@ -255,4 +255,8 @@
       cid = #{cid,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
+
+  <select id="getPasswordByUsername" parameterType="String" resultType="com.ma.bean.Users">
+    SELECT * FROM users WHERE username = #{username}
+  </select>
 </mapper>
