@@ -80,4 +80,17 @@ public class LoginAndRegistController {
 
         return Result.ok(result);
     }
+
+
+    @PostMapping("/setNickname")
+    public Result setNickname(@RequestBody UsersBo usersBo) throws Exception {
+
+        Users user = new Users();
+        user.setId(usersBo.getUserId());
+        user.setNickname(usersBo.getNickname());
+
+        Users result = loginAndRegistService.updateUser(user);
+
+        return Result.ok(result);
+    }
 }
