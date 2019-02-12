@@ -9,4 +9,5 @@ public interface LoginAndRegistService {
     boolean ifUserExist(String username);
     Users getByUsername(String username);
     int saveUser(Users user);
+    Users updateUser(Users user);
 }

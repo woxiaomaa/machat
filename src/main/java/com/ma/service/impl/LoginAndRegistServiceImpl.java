@@ -6,6 +6,7 @@ import com.ma.mapper.UsersMapper;
 import com.ma.service.LoginAndRegistService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -32,11 +33,22 @@ public class LoginAndRegistServiceImpl implements LoginAndRegistService{
     }
 
     @Override
+    @Transactional
     public int saveUser(Users user) {
         user.setId("0000001");
         user.setQrcode("none");
         return usersMapper.insert(user);
     }
 
+    @Override
+    @Transactional
+    public Users updateUser(Users user) {
+        usersMapper.updateByPrimaryKeySelective(user);
+        return queryUserById(user.getId());
+    }
+
+    private Users queryUserById(String userId) {
+        return usersMapper.selectByPrimaryKey(userId);
+    }
 
 }

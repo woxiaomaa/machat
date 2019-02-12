@@ -25,3 +25,12 @@ mapper:
   mappers: com.ma.util.MyMapper
   not-empty: false
   identity: MYSQL
+
+fdfs:
+  so-timeout: 1501
+  connect-timeout: 601
+  thumb-image:
+    width: 80
+    height: 80
+  tracker-list:
+    - 192.168.25.133:22122

@@ -256,7 +256,7 @@
     where id = #{id,jdbcType=VARCHAR}
   </update>
 
-  <select id="getPasswordByUsername" parameterType="String" resultType="com.ma.bean.Users">
+  <select id="getByUsername" parameterType="String" resultType="com.ma.bean.Users">
     SELECT * FROM users WHERE username = #{username}
   </select>
 </mapper>
