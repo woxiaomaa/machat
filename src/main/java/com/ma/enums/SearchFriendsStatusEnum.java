@@ -1,8 +1,8 @@
 package com.ma.enums;
 
 /**
- * 
- * @Description: 添加好友前置状态
+ * Created by mh on 2019/2/13.
+ * 添加好友前置状态
  */
 public enum SearchFriendsStatusEnum {
 	

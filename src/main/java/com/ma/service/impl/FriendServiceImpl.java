@@ -1,10 +1,12 @@
 package com.ma.service.impl;
 
 import com.ma.bean.*;
+import com.ma.bean.vo.FriendRequestVo;
 import com.ma.enums.SearchFriendsStatusEnum;
 import com.ma.mapper.FriendsRequestMapper;
 import com.ma.mapper.MyFriendsMapper;
 import com.ma.mapper.UsersMapper;
+import com.ma.mapper.UsersMapperCustom;
 import com.ma.service.FriendService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +29,9 @@ public class FriendServiceImpl implements FriendService{
 
     @Autowired
     private FriendsRequestMapper friendsRequestMapper;
+
+    @Autowired
+    private UsersMapperCustom usersMapperCustom;
 
 
     @Override
@@ -67,7 +72,6 @@ public class FriendServiceImpl implements FriendService{
     @Transactional
     public void sendFriendRequest(String myUserId, String friendUsername) {
         Users friend = usersMapper.getByUsername(friendUsername);
-        new FriendsRequestExample();
         FriendsRequestExample friendsRequestExample = new FriendsRequestExample();
         FriendsRequestExample.Criteria criteria = friendsRequestExample.createCriteria();
         criteria.andSendUserIdEqualTo(myUserId);
@@ -83,5 +87,41 @@ public class FriendServiceImpl implements FriendService{
             friendsRequestMapper.insert(request);
 
         }
+    }
+
+    @Override
+    public List<FriendRequestVo> queryFriendRequestList(String acceptUserId) {
+        return usersMapperCustom.queryFriendRequestList(acceptUserId);
+    }
+
+    @Override
+    @Transactional
+    public void deleteFriendRequest(String sendUserId, String acceptUserId) {
+        FriendsRequestExample friendsRequestExample = new FriendsRequestExample();
+        FriendsRequestExample.Criteria criteria = friendsRequestExample.createCriteria();
+        criteria.andSendUserIdEqualTo(sendUserId);
+        criteria.andAcceptUserIdEqualTo(acceptUserId);
+        friendsRequestMapper.deleteByExample(friendsRequestExample);
+    }
+
+    @Override
+    @Transactional
+    public void passFriendRequest(String sendUserId, String acceptUserId) {
+        saveFriends(sendUserId, acceptUserId);
+        saveFriends(acceptUserId, sendUserId);
+        deleteFriendRequest(sendUserId, acceptUserId);
+
+
+
+    }
+
+    @Transactional
+    private void saveFriends(String sendUserId, String acceptUserId) {
+        MyFriends myFriends = new MyFriends();
+        String recordId = UUID.randomUUID().toString().replaceAll("-", "");
+        myFriends.setId(recordId);
+        myFriends.setFriendUserId(acceptUserId);
+        myFriends.setMyUserId(sendUserId);
+        myFriendsMapper.insert(myFriends);
     }
 }
