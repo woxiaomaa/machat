@@ -96,7 +96,7 @@ public class FriendController {
 
 
     /**
-     *
+     *处理好友请求（通过或拒绝
      * @param acceptUserId
      * @param sendUserId
      * @param operType
@@ -106,30 +106,39 @@ public class FriendController {
     public Result operFriendRequest(String acceptUserId, String sendUserId,
                                              Integer operType) {
 
-        // 0. acceptUserId sendUserId operType 判断不能为空
         if (StringUtils.isBlank(acceptUserId)
                 || StringUtils.isBlank(sendUserId)
                 || operType == null) {
             return Result.errorMsg("");
         }
 
-        // 1. 如果operType 没有对应的枚举值，则直接抛出空错误信息
         if (StringUtils.isBlank(OperatorFriendRequestTypeEnum.getMsgByType(operType))) {
             return Result.errorMsg("");
         }
 
         if (operType == OperatorFriendRequestTypeEnum.IGNORE.type) {
-            // 2. 判断如果忽略好友请求，则直接删除好友请求的数据库表记录
             friendService.deleteFriendRequest(sendUserId, acceptUserId);
         } else if (operType == OperatorFriendRequestTypeEnum.PASS.type) {
-            // 3. 判断如果是通过好友请求，则互相增加好友记录到数据库对应的表
-            //	   然后删除好友请求的数据库表记录
             friendService.passFriendRequest(sendUserId, acceptUserId);
         }
 
-        // 4. 数据库查询好友列表
-        //List<MyFriendsVo> myFirends = friendService.queryMyFriends(acceptUserId);
+        // 数据库查询好友列表
+        List<MyFriendsVo> myFirends = friendService.queryMyFriends(acceptUserId);
 
-        return Result.ok();
+        return Result.ok(myFirends);
+    }
+
+    /**
+     * 根据id获取好友列表
+     * @param userId
+     * @return
+     */
+    @PostMapping("/myFriends")
+    public Result myFriends(String userId) {
+        if (StringUtils.isBlank(userId)) {
+            return Result.errorMsg("");
+        }
+        List<MyFriendsVo> myFirends = friendService.queryMyFriends(userId);
+        return Result.ok(myFirends);
     }
 }

@@ -2,6 +2,7 @@ package com.ma.service.impl;
 
 import com.ma.bean.*;
 import com.ma.bean.vo.FriendRequestVo;
+import com.ma.bean.vo.MyFriendsVo;
 import com.ma.enums.SearchFriendsStatusEnum;
 import com.ma.mapper.FriendsRequestMapper;
 import com.ma.mapper.MyFriendsMapper;
@@ -113,6 +114,11 @@ public class FriendServiceImpl implements FriendService{
 
 
 
+    }
+
+    @Override
+    public List<MyFriendsVo> queryMyFriends(String userId) {
+        return usersMapperCustom.queryMyFriends(userId);
     }
 
     @Transactional

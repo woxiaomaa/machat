@@ -2,6 +2,7 @@ package com.ma.service;
 
 import com.ma.bean.Users;
 import com.ma.bean.vo.FriendRequestVo;
+import com.ma.bean.vo.MyFriendsVo;
 
 import java.util.List;
 
@@ -51,4 +52,11 @@ public interface FriendService {
      * @param acceptUserId
      */
     public void passFriendRequest(String sendUserId, String acceptUserId);
+
+    /**
+     * 获取好友列表
+     * @param userId
+     * @return
+     */
+    public List<MyFriendsVo> queryMyFriends(String userId);
 }

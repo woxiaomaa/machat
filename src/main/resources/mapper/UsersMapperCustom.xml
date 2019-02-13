@@ -35,7 +35,7 @@
 		left join 
 			users u
 		on 
-			u.id = mf.my_friend_user_id
+			u.id = mf.friend_user_id
 		where 
 			mf.my_user_id = #{userId}
 	
