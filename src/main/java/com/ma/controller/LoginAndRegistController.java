@@ -29,13 +29,12 @@ public class LoginAndRegistController {
     @PostMapping("/loginAndRegist")
     public Result login(@RequestBody Users user) throws Exception {
         if(StringUtils.isBlank(user.getUsername()) || StringUtils.isBlank(user.getPassword())) return Result.errorMsg("账户名或密码不能为空");
-        Users uResult = null;
         UsersVo usersVo = new UsersVo();
-        if(loginAndRegistService.ifUserExist(user.getUsername())){
-            uResult = loginAndRegistService.getByUsername(user.getUsername());
-            if(uResult != null){
+        Users u = loginAndRegistService.ifUserExist(user.getUsername());
+        if(u != null){
+            if(u.getPassword().equals(MD5Utils.getMD5Str(user.getPassword()))){
                 //账号密码验证成功
-                BeanUtils.copyProperties(uResult,usersVo);
+                BeanUtils.copyProperties(u,usersVo);
             }else{
                 return Result.errorMsg("用户名或密码错误");
             }
@@ -61,7 +60,7 @@ public class LoginAndRegistController {
         // 上传文件到fastdfs
         MultipartFile faceFile = FileUtils.fileToMultipart(userFacePath);
         String url = fastDFSClient.uploadBase64(faceFile);
-        System.out.println(url);
+        //System.out.println(url);
 
         //大图		"xxxxx.png"
         //小图		"xxxxx_80x80.png

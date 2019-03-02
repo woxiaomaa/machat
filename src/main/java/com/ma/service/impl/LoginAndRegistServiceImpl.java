@@ -31,12 +31,13 @@ public class LoginAndRegistServiceImpl implements LoginAndRegistService{
     private FastDFSClient fastDFSClient;
 
     @Override
-    public boolean ifUserExist(String username) {
+    public Users ifUserExist(String username) {
         UsersExample usersExample = new UsersExample();
         UsersExample.Criteria criteria = usersExample.createCriteria();
         criteria.andUsernameEqualTo(username);
         List<Users> users = usersMapper.selectByExample(usersExample);
-        return users.size() != 0;
+        if(users.size() != 0) return users.get(0);
+        else return null;
     }
 
     @Override
