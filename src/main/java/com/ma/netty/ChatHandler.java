@@ -41,6 +41,7 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
         // 2. 判断消息类型，根据不同的类型来处理不同的业务
         if (action == MsgActionEnum.CONNECT.type) {
             // 	2.1  当websocket 第一次open的时候，初始化channel，把用的channel和userid关联起来
+            //app当退出时关闭channel，重新代开app再次将channel和userid关联起来，但是此时channel与原来的channel不同了
             String senderId = dataContent.getChatMsg().getSenderId();
             UserChannelRelation.put(senderId, currentChannel);
 
@@ -105,14 +106,8 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
 
         } else if (action == MsgActionEnum.KEEPALIVE.type) {
             //  2.4  心跳类型的消息
-            System.out.println("收到来自channel为[" + currentChannel + "]的心跳包...");
+            //System.out.println("收到来自channel为[" + currentChannel + "]的心跳包...");
         }
-
-
-
-
-        //clients.writeAndFlush(new TextWebSocketFrame("[服务器在]" + LocalDateTime.now() + "接受到消息, 消息为：" + content));
-
     }
 
     @Override

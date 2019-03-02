@@ -1,14 +1,20 @@
 package com.ma.service.impl;
 
+import com.google.gson.Gson;
 import com.ma.bean.*;
 import com.ma.bean.vo.FriendRequestVo;
 import com.ma.bean.vo.MyFriendsVo;
+import com.ma.enums.MsgActionEnum;
 import com.ma.enums.SearchFriendsStatusEnum;
 import com.ma.mapper.FriendsRequestMapper;
 import com.ma.mapper.MyFriendsMapper;
 import com.ma.mapper.UsersMapper;
 import com.ma.mapper.UsersMapperCustom;
+import com.ma.netty.UserChannelRelation;
+import com.ma.netty.bean.DataContent;
 import com.ma.service.FriendService;
+import io.netty.channel.Channel;
+import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -112,8 +118,13 @@ public class FriendServiceImpl implements FriendService{
         saveFriends(acceptUserId, sendUserId);
         deleteFriendRequest(sendUserId, acceptUserId);
 
-
-
+        Channel sendChannel = UserChannelRelation.get(sendUserId);
+        if (sendChannel != null) {
+            // 使用websocket主动推送消息到请求发起者
+            DataContent dataContent = new DataContent();
+            dataContent.setAction(MsgActionEnum.PULL_FRIEND.type);
+            sendChannel.writeAndFlush(new TextWebSocketFrame(new Gson().toJson(dataContent)));
+        }
     }
 
     @Override

@@ -16,7 +16,7 @@ public class TestController {
     @GetMapping("/test")
     public String test(){
         log.info("有访客到达");
-        log.error("error test");
+        //log.error("error test");
         return "test";
     }
 }

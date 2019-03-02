@@ -1,5 +1,6 @@
 package com.ma.service.impl;
 
+import com.ma.bean.ChatMsgExample;
 import com.ma.enums.MsgSignFlagEnum;
 import com.ma.mapper.ChatMsgMapper;
 import com.ma.mapper.UsersMapperCustom;
@@ -43,5 +44,14 @@ public class ChatServiceImpl implements ChatService {
     @Transactional
     public void updateMsgSigned(List<String> msgIdList) {
         usersMapperCustom.batchUpdateMsgSigned(msgIdList);
+    }
+
+    @Override
+    public List<com.ma.bean.ChatMsg> getUnReadMsgList(String userId) {
+        ChatMsgExample chatMsgExample = new ChatMsgExample();
+        ChatMsgExample.Criteria criteria = chatMsgExample.createCriteria();
+        criteria.andSignFlagEqualTo(MsgSignFlagEnum.unsign.getType());
+        criteria.andAcceptUserIdEqualTo(userId);
+        return chatMsgMapper.selectByExample(chatMsgExample);
     }
 }

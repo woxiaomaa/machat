@@ -10,4 +10,5 @@ import java.util.List;
 public interface ChatService {
     String saveMsg(ChatMsg chatMsg);
     void updateMsgSigned(List<String> msgIdList);
+    public List<com.ma.bean.ChatMsg> getUnReadMsgList(String userId);
 }
